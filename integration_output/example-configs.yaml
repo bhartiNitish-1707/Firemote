@@ -1,0 +1,160 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Example YAML Configs — HA-Firemote Backend + Universal Remote Card
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# These are ready-to-use Lovelace card configs.
+# Drop any of these into a Manual Card in your dashboard.
+#
+# Replace entity IDs with your actual entities.
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# EXAMPLE 1: Fire TV Stick 4K (minimal — just ADB, no ATV Remote Integration)
+# ───────────────────────────────────────────────────────────────────────────
+# This is the simplest setup. Uses ADB key names for all commands.
+# No android_tv_remote_id or device_type needed.
+---
+type: custom:universal-remote-card
+platform: Fire TV
+media_player_id: media_player.fire_tv_stick
+remote_id: remote.fire_tv_stick   # androidtv integration entity
+rows:
+  - [power, home, back, menu]
+  - [touchpad, [volume_buttons]]
+  - [rewind, play_pause, fast_forward]
+  - [netflix, prime_video, disney, youtube]
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# EXAMPLE 2: Fire TV Stick 4K + Android TV Remote Integration
+#            (faster navigation via KEYCODE_* commands)
+# ───────────────────────────────────────────────────────────────────────────
+# Install the Android TV Remote Integration for your device in HA.
+# Then add android_tv_remote_id pointing to the remote.* entity it creates.
+# Navigation (up/down/left/right/center/home/back) will use KEYCODE_* which
+# is noticeably lower latency than ADB strings.
+---
+type: custom:universal-remote-card
+platform: Fire TV
+media_player_id: media_player.fire_tv_stick
+remote_id: remote.fire_tv_stick
+android_tv_remote_id: remote.fire_tv_stick_remote  # ← NEW: from ATV Remote Integration
+rows:
+  - [power, home, back, menu]
+  - [touchpad, [volume_buttons]]
+  - [rewind, play_pause, fast_forward]
+  - [netflix, prime_video, disney, youtube]
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# EXAMPLE 3: Fire TV Cube 3rd Gen (with device_type for optimised ADB paths)
+# ───────────────────────────────────────────────────────────────────────────
+# Setting device_type enables the correct /dev/input/eventN path for
+# low-latency sendevent-based navigation. The Cube 3rd Gen uses event3.
+---
+type: custom:universal-remote-card
+platform: Fire TV
+media_player_id: media_player.fire_tv_cube
+remote_id: remote.fire_tv_cube
+device_type: fire_tv_cube_third_gen   # ← NEW: enables sendevent paths
+rows:
+  - [power, home, back, settings]
+  - [touchpad, [volume_buttons]]
+  - [rewind, play_pause, fast_forward]
+  - [channel_up, channel_down]
+  - [netflix, prime_video, disney, youtube]
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# EXAMPLE 4: Full config — all three optimisations combined
+# ───────────────────────────────────────────────────────────────────────────
+---
+type: custom:universal-remote-card
+platform: Fire TV
+title: Living Room Fire TV
+media_player_id: media_player.fire_tv_cube_living_room
+remote_id: remote.fire_tv_cube_living_room
+android_tv_remote_id: remote.fire_tv_cube_living_room_remote
+device_type: fire_tv_cube_third_gen
+compatibility_mode: default   # "default"|"strong"|"event4" etc.
+rows:
+  - [power, home, back, menu]
+  - [up]
+  - [left, center, right]
+  - [down]
+  - [volume_down, volume_mute, volume_up]
+  - [rewind, play_pause, fast_forward]
+  - [netflix, prime_video, disney, youtube]
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# EXAMPLE 5: Custom action override — redirect a button to a HA-Firemote
+#            style ADB command (e.g. profile switching)
+# ───────────────────────────────────────────────────────────────────────────
+---
+type: custom:universal-remote-card
+platform: Fire TV
+media_player_id: media_player.fire_tv_stick
+remote_id: remote.fire_tv_stick
+custom_actions:
+  # Override the profile button to use ADB KEYCODE_PROFILE_SWITCH
+  - name: profile
+    tap_action:
+      action: perform-action
+      perform_action: androidtv.adb_command
+      target:
+        entity_id: media_player.fire_tv_stick
+      data:
+        command: adb shell input keyevent KEYCODE_PROFILE_SWITCH
+    icon: mdi:account-circle
+
+  # Custom app launcher using ADB am start
+  - name: my_app
+    tap_action:
+      action: perform-action
+      perform_action: androidtv.adb_command
+      target:
+        entity_id: media_player.fire_tv_stick
+      data:
+        command: "adb shell am start -n com.example.myapp/.MainActivity"
+    icon: mdi:television-play
+    label: My App
+
+rows:
+  - [power, home, back, profile]
+  - [touchpad, [volume_buttons]]
+  - [play_pause]
+  - [netflix, prime_video, my_app]
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# EXAMPLE 6: Android TV (non-Fire) with ATV Remote Integration
+# ───────────────────────────────────────────────────────────────────────────
+---
+type: custom:universal-remote-card
+platform: Android TV
+media_player_id: media_player.nvidia_shield
+remote_id: remote.nvidia_shield
+android_tv_remote_id: remote.nvidia_shield_remote
+rows:
+  - [power, home, back, menu]
+  - [touchpad, [volume_buttons]]
+  - [rewind, play_pause, fast_forward]
+  - [netflix, youtube, plex]
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# ENTITY NAMING REFERENCE
+# ───────────────────────────────────────────────────────────────────────────
+#
+# Field              | Integration           | Example entity
+# -------------------|-----------------------|---------------------------------
+# media_player_id    | androidtv             | media_player.fire_tv
+# remote_id          | androidtv             | remote.fire_tv  (for ADB key actions)
+# android_tv_remote_id| androidtv_remote     | remote.fire_tv_remote
+#
+# To find your entities:
+#   Settings → Devices & Services → Integrations → Android TV (or Android TV Remote)
+#   The "remote.*" entity under Android TV is for ADB key commands.
+#   The "remote.*" entity under Android TV Remote is for KEYCODE_* commands.
+#   They are different entities from different integrations.
