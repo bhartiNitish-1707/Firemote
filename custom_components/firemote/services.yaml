@@ -1,0 +1,51 @@
+send_command:
+  name: Send command
+  description: Send a remote-style command to a configured Firemote device.
+  fields:
+    device_name:
+      description: Device name or configured entity ID.
+      example: "Living Room Fire TV"
+    command:
+      description: Named command to send (up, down, left, right, home, power, play_pause, etc.).
+      example: "home"
+
+launch_app:
+  name: Launch app or source
+  description: Launch a named app or source for the configured device.
+  fields:
+    device_name:
+      description: Device name or configured entity ID.
+      example: "Living Room Fire TV"
+    app_name:
+      description: App name or media source to launch.
+      example: "Netflix"
+
+toggle_power:
+  name: Toggle power
+  description: Toggle power for the configured device.
+  fields:
+    device_name:
+      description: Device name or configured entity ID.
+      example: "Living Room Fire TV"
+
+set_volume:
+  name: Set volume
+  description: Set device volume level using media_player.volume_set.
+  fields:
+    device_name:
+      description: Device name or configured entity ID.
+      example: "Living Room Fire TV"
+    volume_level:
+      description: Volume level between 0.0 and 1.0.
+      example: 0.5
+
+send_text:
+  name: Send text
+  description: Send text to the focused input on the configured device.
+  fields:
+    device_name:
+      description: Device name or configured entity ID.
+      example: "Living Room Fire TV"
+    text:
+      description: Text to send to the device.
+      example: "Hello World"

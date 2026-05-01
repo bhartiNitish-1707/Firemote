@@ -1,0 +1,47 @@
+# Firemote custom integration example configuration
+
+firemote:
+  devices:
+    - name: Living Room Fire TV
+      device_family: amazon-fire
+      media_player_id: media_player.living_room_fire_tv
+      remote_id: remote.fire_tv
+      android_tv_remote_id: remote.fire_tv_remote
+      device_type: fire_stick_4k
+      compatibility_mode: default
+
+    - name: Bedroom Roku
+      device_family: roku
+      media_player_id: media_player.bedroom_roku
+      roku_remote_id: remote.bedroom_roku
+
+# Example service calls
+
+# Send a navigation command
+service: firemote.send_command
+service_data:
+  device_name: "Living Room Fire TV"
+  command: "home"
+
+# Toggle power
+service: firemote.toggle_power
+service_data:
+  device_name: "Living Room Fire TV"
+
+# Launch an app or source
+service: firemote.launch_app
+service_data:
+  device_name: "Living Room Fire TV"
+  app_name: "Netflix"
+
+# Set volume
+service: firemote.set_volume
+service_data:
+  device_name: "Living Room Fire TV"
+  volume_level: 0.5
+
+# Send text
+service: firemote.send_text
+service_data:
+  device_name: "Living Room Fire TV"
+  text: "Hello"

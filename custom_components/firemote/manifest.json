@@ -1,0 +1,11 @@
+{
+  "domain": "firemote",
+  "name": "Firemote",
+  "version": "1.0.0",
+  "documentation": "https://github.com/bhartiNitish-1707/Firemote",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@bhartiNitish-1707"],
+  "config_flow": false,
+  "iot_class": "local_push"
+}
