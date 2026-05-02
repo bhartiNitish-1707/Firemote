@@ -1,0 +1,16 @@
+{
+  "name": "firemote-card",
+  "version": "1.0.0",
+  "description": "Home Assistant Lovelace card for Firemote backend services.",
+  "author": "Firemote",
+  "license": "MIT",
+  "main": "dist/HA-Firemote.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.0",
+    "rollup": "^3.30.0",
+    "typescript": "^5.5.0"
+  }
+}
